@@ -8,7 +8,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include "unu_chat_definitions.h"
+#include "chat_definitions.h"
 #include "string.h"
 #include "cypher_lib.h"
 

@@ -18,12 +18,12 @@ set(CMAKE_CXX_FLAGS -pthread)
 find_package(Threads)
 
 add_executable(UnuServer 
-                src/unu_server.c
+                src/server.c
                 src/string.c
 )
 
 add_executable(UnuClient 
-                src/unu_client.c
+                src/client.c
                 src/string.c
                 src/cypher_lib.c
 )

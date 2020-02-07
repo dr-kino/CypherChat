@@ -6,7 +6,7 @@ link_directories(/usr/lib)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 set(sources
-		src/unu_main_tests.c
+		src/main_tests.c
 		../src/cypher_lib.c
 		)
 

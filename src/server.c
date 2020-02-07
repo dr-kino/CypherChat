@@ -8,8 +8,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include "unu_chat_definitions.h"
-#include "unu_server.h"
+#include "chat_definitions.h"
+#include "server.h"
 
 // Global variables
 int server_sockfd = 0, client_sockfd = 0;
