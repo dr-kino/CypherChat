@@ -10,19 +10,19 @@
 # ================================================================================================
 cmake_minimum_required (VERSION 3.7)
 
-project(Unu)
+project(Chat)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_FLAGS -pthread)
 
 find_package(Threads)
 
-add_executable(UnuServer 
+add_executable(Server 
                 src/server.c
                 src/string.c
 )
 
-add_executable(UnuClient 
+add_executable(Client 
                 src/client.c
                 src/string.c
                 src/cypher_lib.c
@@ -32,5 +32,5 @@ include_directories(
                 src/
 )
 
-target_link_libraries(UnuServer ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries (UnuClient ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(Server ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (Client ${CMAKE_THREAD_LIBS_INIT})
