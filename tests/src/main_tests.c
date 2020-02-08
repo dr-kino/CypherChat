@@ -1,15 +1,14 @@
 #include "cypher_lib.h"
 
 int main(int argc, char *argv[]) { 
-	char bloco_entrada[100];
-  	char bloco_saida[100];
+	char bloco_entrada[101];
+  	char bloco_saida[101];
   	char chave[9];
   	char vetor_inicial[9];
   	int modo;
 
   	strcpy(bloco_entrada,"!!cypher lib test!!");
 
-  	strcpy(bloco_saida,"                ");
   	strcpy(chave,"12345678");
   	strcpy(vetor_inicial,"initvect");
   
@@ -25,7 +24,8 @@ int main(int argc, char *argv[]) {
   	// Decrypt
   	modo = 1;
 	strcpy(vetor_inicial,"initvect");
-  	DES_CBC(modo,bloco_saida,chave,vetor_inicial,bloco_entrada);
+  	DES_CBC(modo,"zǝfM@pwc0n&<",chave,vetor_inicial,bloco_entrada);
+	//DES_CBC(modo,bloco_saida,chave,vetor_inicial,bloco_entrada);
 
   	printf("\nDecripting\n");
   	printf("Input Block (128 bits ou 16 bytes)...........: %s\n",bloco_saida);

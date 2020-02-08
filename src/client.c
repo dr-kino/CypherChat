@@ -23,6 +23,7 @@ void catch_ctrl_c_and_exit(int sig) {
 
 void recv_msg_handler() {
     char receiveMessage[LENGTH_SEND] = {};
+    char receiveMessage_tmp[LENGTH_SEND] = {};
     char message_dec[LENGTH_SEND] = {};
     char *message_enc;
     int messageLength = 0;
@@ -35,20 +36,35 @@ void recv_msg_handler() {
         int receive = recv(sockfd, receiveMessage, LENGTH_SEND, 0);
         if (receive > 0) {
             
-            for (messageLength = 4; receiveMessage[messageLength] != '\0'; ++messageLength)
+            str_trim_lf(receiveMessage_tmp, LENGTH_MSG);
+            for (messageLength = 5; receiveMessage[messageLength] != '\0'; ++messageLength)
             {
-                if (receiveMessage[messageLength] == ';') {
+                if ((receiveMessage[messageLength + 1] == ' ') &&
+                    (receiveMessage[messageLength + 2] == 'f') &&
+                    (receiveMessage[messageLength + 3] == 'r') &&
+                    (receiveMessage[messageLength + 4] == 'o') &&
+                    (receiveMessage[messageLength + 5] == 'm') &&
+                    (receiveMessage[messageLength + 6] == ' ')) {
+
+                    receiveMessage_tmp[messageLength - 5] = receiveMessage[messageLength];
+                    printf("messageLength: %d\n", messageLength);
                     break;
                 }
-                //message_enc[messageLength - 4] = receiveMessage[messageLength];
+                receiveMessage_tmp[messageLength - 5] = receiveMessage[messageLength];
             }
 
+            printf("Temporary Buffer: %s\n", receiveMessage_tmp);
             // Call cypher lib: Decrypt
-            //strcpy(iv,"initvect");
-            //DES_CBC(1,message_dec,key,iv,receiveMessage);
-            //printf("\rDecrypted Message: %s\n", message_dec);
+            strcpy(iv,"initvect");
+            printf("Key: %s\n", key);
+            printf("IV: %s\n", iv);
+            DES_CBC(1,receiveMessage_tmp,key,iv,message_dec);
 
-            printf("\r%s\n", receiveMessage);
+            //printf("\rEncrypted Message: %s\n", receiveMessage);
+            //printf("\rSizeOf Encrypted Message: %d\n", sizeof(message_dec));
+            printf("\rDecrypted Message: %s\n", message_dec);
+
+            printf("\r%s\n", message_dec);
             //printf("\r%s\n", message_dec);
             str_overwrite_stdout();
         } else if (receive == 0) {
@@ -63,6 +79,7 @@ void recv_msg_handler() {
 
 void send_msg_handler() {
     char message[LENGTH_MSG] = {};
+    char message_tmp[LENGTH_MSG] = {};
     char message_enc[LENGTH_MSG] = {};
     int messageLength = 0;
     char key[9];
@@ -84,17 +101,22 @@ void send_msg_handler() {
         // Call cypher lib: encrypt
         strcpy(iv,"initvect");
         DES_CBC(0,message,key,iv,message_enc);
-        //printf("\rEncrypted Message: %s\n", message_enc);
+        printf("\rMessage: %s\n", message);
+        printf("\rEncrypted Message: %s\n", message_enc);
+        printf("\rSizeOf Encrypted Message: %d\n", sizeof(message_enc));
+
+        str_trim_lf(message, LENGTH_MSG);
+
+        strcpy(iv,"initvect");
+        DES_CBC(1,message_enc,key,iv,message_tmp);
+        printf("\rDecrypted Message: %s\n", message);
 
         for (messageLength = 0; message_enc[messageLength] != '\0'; ++messageLength);
 
-        message_enc[messageLength] = ';';
-        message_enc[messageLength + 1] = (char)messageLength;
-        message_enc[messageLength + 2] = '\0';
-        //printf("\rEncrypted Message: %s\n", message_enc);
+        printf("\rEncrypted Message Length: %d\n", messageLength);
 
-        send(sockfd, message, LENGTH_MSG, 0);
-        //send(sockfd, message_enc, LENGTH_MSG, 0);
+        //send(sockfd, message, LENGTH_MSG, 0);
+        send(sockfd, message_enc, LENGTH_MSG, 0);
         if (strcmp(message, "exit") == 0) {
             break;
         }
